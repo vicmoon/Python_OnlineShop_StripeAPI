@@ -1,7 +1,23 @@
 body {
-  background-color: #5c7285;
+  background-color: #d84040;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 20px;
   color: aliceblue;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+  margin: 0;
+}
+
+button {
+  padding: 20px;
+  background-color: #f8f2de;
+  border-radius: 30px;
+}
+
+button:hover {
+  background-color: burlywood;
+  cursor: pointer;
 }

@@ -10,9 +10,17 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>Buy me a coffee!</h1>
+    <h1>Buy my book</h1>
     <form action="{{ url_for('create_checkout_session') }}" method="POST">
       <button type="submit">Buy</button>
     </form>
+
+    <!-- <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+
+    <stripe-buy-button
+      buy-button-id="buy_btn_1QyvC9GHVFgLkmFRPNyf41Da"
+      publishable-key="pk_test_51IBheWGHVFgLkmFRTHcb01ScFA5bwjwYdi6qwXk4NaLSGAcuaemYFvbFQhObdxeSkyg8FBKfWGKYjhCdwh5zmNgA00OJiMnxCN"
+    >
+    </stripe-buy-button> -->
   </body>
 </html>

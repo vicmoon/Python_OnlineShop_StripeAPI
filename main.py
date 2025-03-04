@@ -20,11 +20,11 @@ def create_checkout_session():
                     'price': 'price_1QyuevGHVFgLkmFRUvh1iJ6x',
                     'quantity': 1,
                 },
-                {
+                # {
                     
-                    'price': 'price_1Qyv0iGHVFgLkmFRgnJepW5d',
-                    'quantity': 1,
-                },
+                #     'price': 'price_1Qyv0iGHVFgLkmFRgnJepW5d',
+                #     'quantity': 1,
+                # },
             ],
             mode='payment',
             success_url=YOUR_DOMAIN + '/success.html',
