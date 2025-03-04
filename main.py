@@ -34,7 +34,7 @@ class Product(db.Model):
     __tablename__ = "product"  # Optional, but good practice
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False, unique=True)
-    price = db.Column(db.Integer, nullable=False)  # Amount in cents (Stripe format)
+    price = db.Column(db.Float, nullable=False)  # store as Float 
     currency = db.Column(db.String(250), nullable=False, default="usd")
     img_url = db.Column(db.String(250), nullable=True)  # Allow nullable for images
 
@@ -75,23 +75,30 @@ def add_product():
 
 @app.route('/create-checkout-session', methods=['POST'])
 def create_checkout_session():
-    try:
-        checkout_session = stripe.checkout.Session.create(
-            line_items=[
-                {
-                    
-                    'price': 'price_1QyuevGHVFgLkmFRUvh1iJ6x',
-                    'quantity': 1,
+    cart_items = session.get("cart", {})
+    if not cart_items:
+        return redirect(url_for("cart"))
+
+    line_items = []
+    for product_id, quantity in cart_items.items():
+        product = Product.query.get(product_id)
+        if product:
+            line_items.append({
+                "price_data" : {
+                    "currency": product.currency, 
+                    "product_data": { "name" : product.name}, 
+                    "unit_amount": int(product.price * 100),
                 },
-                # {
-                    
-                #     'price': 'price_1Qyv0iGHVFgLkmFRgnJepW5d',
-                #     'quantity': 1,
-                # },
-            ],
-            mode='payment',
-            success_url=YOUR_DOMAIN + '/success.html',
-            cancel_url=YOUR_DOMAIN + '/cancel.html',
+                "quantity" : quantity,
+            })
+
+    try:
+       checkout_session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=line_items,
+            mode="payment",
+            success_url=YOUR_DOMAIN + 'success.html',
+            cancel_url=YOUR_DOMAIN + 'cancel.html',
         )
     except Exception as e:
         return str(e)
@@ -104,6 +111,20 @@ def create_checkout_session():
 def home():
     products= Product.query.all()
     return render_template("index.html", products=products)
+
+
+@app.route("/cart")
+def cart():
+    cart_items = session.get("cart", {})
+    # Debugging: Print cart data
+    print("Cart contents:", cart_items)
+    
+    product_ids = cart_items.keys()
+
+    products = Product.query.filter(Product.id.in_(product_ids)).all()
+
+    return render_template("cart.html", cart=cart_items, products=products)
+
 
 @app.route("/add_to_cart/<product_id>")
 def add_to_cart(product_id):
@@ -118,15 +139,26 @@ def add_to_cart(product_id):
         cart[product_id] = 1
 
     session["cart"] = cart
+
     return redirect(url_for("cart"))
 
 
-@app.route("/cart")
-def cart():
-    cart_items = session.get("cart", {})
-    product_ids = cart_items.keys()
-    products = Product.query.filter(Product.id.in_(product_ids)).all()
-    return render_template("cart.html", cart=cart_items, products=products)
+@app.route("/delete/<int:product_id>")
+def delete_item(product_id):
+    if "cart" in session:
+        cart = session["cart"]
+
+        product_id = str(product_id)  # Convert to string to match session keys
+
+        if product_id in cart:
+            del cart[product_id]  # Remove item from cart
+            session["cart"] = cart  # Update session
+            flash("Item removed from cart", "success")
+        else:
+            flash("Item not found in cart", "error")
+    
+    return redirect(url_for("cart"))
+
 
 
 @app.route('/success.html')

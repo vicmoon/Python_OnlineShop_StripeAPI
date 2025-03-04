@@ -9,16 +9,27 @@
   </head>
   <body>
     <h1>Your Cart</h1>
-    {% quantity in cart%}
+
+    {% for product in products %} {% set quantity = cart[product.id|string] %}
+    {# Convert ID to string to match session keys #}
     <p>
-      {{ products[id].name }} (x{{ quantity }}) - ${{ (products[id].price *
-      quantity) / 100 }}
+      {{ product.name }} (x {{ quantity }}) - {{ product.price }}
+      {{product.currency}}
+      <a
+        href="{{ url_for('delete_item', product_id=product.id) }}"
+        class="delete-btn"
+        >Remove</a
+      >
     </p>
     {% endfor %}
+
     <br />
+
     <form action="{{ url_for('create_checkout_session') }}" method="post">
       <button type="submit">Checkout</button>
     </form>
-    <a href="{{ url_for('home') }}">Continue Shopping</a>
+    <a href="{{ url_for('home') }}" class="continue_shopping"
+      >Continue Shopping</a
+    >
   </body>
 </html>

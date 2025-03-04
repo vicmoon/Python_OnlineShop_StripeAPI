@@ -1,32 +1,32 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <title>Document</title>
-  </head>
-  <body>
-    <h1>Buy my book</h1>
-    <form action="{{ url_for('create_checkout_session') }}" method="POST">
-      <button type="submit">Buy</button>
-    </form>
-  </body>
-</html> -->
-
 <!DOCTYPE html>
 <html lang="en">
-  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
   <head>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
     <title>Shop</title>
   </head>
   <body>
     <h1>Shop</h1>
-    {% for product in products %}
-    <p>{{ product.name }} - {{ product.price }} {{product.currency}}</p>
-    <a href="{{ url_for('add_to_cart', product_id=id) }}">Add to Cart</a>
-    {% endfor %}
-    <br />
-    <a href="{{ url_for('cart') }}">View Cart</a>
+
+    <div class="products">
+      {% for product in products %}
+      <div class="product-card">
+        <img src="{{ product.img_url }}" alt="{{ product.name }}" />
+        <p>{{ product.name }} - {{ product.price }} {{ product.currency }}</p>
+        <a
+          href="{{ url_for('add_to_cart', product_id=product.id) }}"
+          class="add-to-cart"
+          >Add to Cart</a
+        >
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Move the View Cart link outside the products div -->
+    <div class="cart-container">
+      <a href="{{ url_for('cart') }}" class="card-link">View Cart</a>
+    </div>
   </body>
 </html>
