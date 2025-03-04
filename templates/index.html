@@ -1,12 +1,9 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
+    
     <title>Document</title>
   </head>
   <body>
@@ -14,13 +11,22 @@
     <form action="{{ url_for('create_checkout_session') }}" method="POST">
       <button type="submit">Buy</button>
     </form>
+  </body>
+</html> -->
 
-    <!-- <script async src="https://js.stripe.com/v3/buy-button.js"></script>
-
-    <stripe-buy-button
-      buy-button-id="buy_btn_1QyvC9GHVFgLkmFRPNyf41Da"
-      publishable-key="pk_test_51IBheWGHVFgLkmFRTHcb01ScFA5bwjwYdi6qwXk4NaLSGAcuaemYFvbFQhObdxeSkyg8FBKfWGKYjhCdwh5zmNgA00OJiMnxCN"
-    >
-    </stripe-buy-button> -->
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <head>
+    <title>Shop</title>
+  </head>
+  <body>
+    <h1>Shop</h1>
+    {% for product in products %}
+    <p>{{ product.name }} - {{ product.price }} {{product.currency}}</p>
+    <a href="{{ url_for('add_to_cart', product_id=id) }}">Add to Cart</a>
+    {% endfor %}
+    <br />
+    <a href="{{ url_for('cart') }}">View Cart</a>
   </body>
 </html>

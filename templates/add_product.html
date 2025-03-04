@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <title>Add Product</title>
+  </head>
+  <body>
+    <h1>Add New Product</h1>
+    <form method="POST">
+      {{ form.hidden_tag() }}
+      <p>{{ form.name.label }} {{ form.name }}</p>
+      <p>{{ form.price.label }} {{ form.price }}</p>
+      <p>{{ form.currency.label }} {{ form.currency }}</p>
+      <p>{{ form.img_url.label }} {{ form.img_url }}</p>
+      <p>{{ form.submit }}</p>
+    </form>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+  </body>
+</html>
