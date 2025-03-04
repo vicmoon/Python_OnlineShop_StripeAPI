@@ -10,6 +10,9 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>Hello</h1>
+    <h1>Buy me a coffee!</h1>
+    <form action="{{ url_for('create_checkout_session') }}" method="POST">
+      <button type="submit">Buy</button>
+    </form>
   </body>
 </html>
