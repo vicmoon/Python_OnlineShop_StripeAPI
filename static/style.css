@@ -55,6 +55,16 @@ body {
   border-radius: 5px;
 }
 
+.add-product {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.add-product p {
+  text-align: left;
+  padding: 10px;
+}
+
 button {
   padding: 20px;
   background-color: #f8f2de;

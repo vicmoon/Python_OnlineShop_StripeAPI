@@ -9,13 +9,19 @@ from wtforms.validators import DataRequired
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
 import my_creds
+import os
 
 app = Flask(__name__)
 
-STRIPE_API_KEY = my_creds.STRIPE_API_KEY
-stripe.api_key = STRIPE_API_KEY  # Initialize the Stripe API key
-YOUR_DOMAIN = 'http://127.0.0.1:5000/'
-app.config['SECRET_KEY'] = my_creds.SECRET_KEY
+# STRIPE_API_KEY = my_creds.STRIPE_API_KEY
+# MY_DOMAIN= my_creds.MY_DOMAIN
+
+
+STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
+MY_DOMAIN=os.getenv("MY_DOMAIN")
+
+stripe.api_key = STRIPE_API_KEY 
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
 
 
@@ -39,11 +45,10 @@ class Product(db.Model):
     img_url = db.Column(db.String(250), nullable=True)  # Allow nullable for images
 
 
-
 #create table 
 
-# with app.app_context():
-#     db.create_all()
+with app.app_context():
+    db.create_all()
 
 class ProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired()])
@@ -97,8 +102,8 @@ def create_checkout_session():
             payment_method_types=["card"],
             line_items=line_items,
             mode="payment",
-            success_url=YOUR_DOMAIN + 'success.html',
-            cancel_url=YOUR_DOMAIN + 'cancel.html',
+            success_url=MY_DOMAIN+ 'success.html',
+            cancel_url=MY_DOMAIN+ 'cancel.html',
         )
     except Exception as e:
         return str(e)
@@ -116,8 +121,9 @@ def home():
 @app.route("/cart")
 def cart():
     cart_items = session.get("cart", {})
-    # Debugging: Print cart data
-    print("Cart contents:", cart_items)
+
+    # # Debugging: Print cart data
+    # print("Cart contents:", cart_items)
     
     product_ids = cart_items.keys()
 
