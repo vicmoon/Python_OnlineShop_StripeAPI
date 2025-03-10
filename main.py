@@ -23,9 +23,6 @@ MY_DOMAIN=os.getenv("MY_DOMAIN")
 stripe.api_key = STRIPE_API_KEY 
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
 
-
-
-# Dummy product data (In real case, use a database)
 #create DB
 
 class Base(DeclarativeBase):
